@@ -10,7 +10,7 @@ public class Potion : MonoBehaviour
     private void AddHealth()
     {
         //player.instance += healthToAdd;
-        Player.Instance.playerHealth+=healthToAdd;
+        PlayerMovement.Instance.playerHealth+=healthToAdd;
 
         //PlayerProfile.Instance.playerHealth += healthToAdd;
     }

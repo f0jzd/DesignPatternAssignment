@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     
     [Range(0,100)]
@@ -12,20 +12,20 @@ public class Player : MonoBehaviour
     
     private Inventory _inventory = new Inventory();
     
-    public static Player Instance
+    public static PlayerMovement Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = new GameObject().AddComponent<Player>();
+                instance = new GameObject().AddComponent<PlayerMovement>();
             }
 
             return instance;
         }
     }
     public int PlayerHealth => playerHealth;
-    private static Player instance;
+    private static PlayerMovement instance;
 
 
     private enum State {
@@ -87,16 +87,6 @@ public class Player : MonoBehaviour
 
     private void OnEvent(Event playerEvent)
     {
-        ///This is literally a switch statement
-        /* if (playerEvent == Event.StartedWalking)
-         {
-             pState = State.Walking;
-         }
-         else if (playerEvent == Event.StartedRunning)
-         {
-                 
-         }*/
-        
         switch (playerEvent)
         { 
             case Event.StartedWalking:
