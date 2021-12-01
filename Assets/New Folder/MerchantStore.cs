@@ -21,8 +21,10 @@ public class MerchantStore : MonoBehaviour
 
 
     private Inventory playerInventory;
-    [SerializeField]private Item HealthPotion;
-    [SerializeField]private Item Sword;
+    public Item HealthPotion;
+    public Item Sword;
+
+    public Slider potionSLider;
     
 
 
@@ -109,9 +111,9 @@ public class MerchantStore : MonoBehaviour
 
     private void BuyHealthPotion()
     {
+        var hpPot = Instantiate(HealthPotion);
         
-        
-        playerInventory.AddToInventory(HealthPotion);
+        playerInventory.AddToInventory(hpPot);
         
         var helfPotion = storeManager.BuyPotion(PotionType.Health, 10);
         healthPotions.Add(helfPotion);
