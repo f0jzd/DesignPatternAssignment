@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-class PotionItem : Item
+class HealthPotion : Item
 {
     
 }

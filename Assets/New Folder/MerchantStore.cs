@@ -1,129 +1,115 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class MerchantStore : MonoBehaviour
 {
     public Button healthButton;
     public Button manaButton;
     public Button swordButton;
-
-    public Text amountOfHealthPots;
-    public Text amountOfManaPotions;
-
-    private List<Potion> healthPotions = new List<Potion>();
-    private List<Potion> manaPotions = new List<Potion>();
     
-    StoreManager storeManager = new StoreManager();
-
-
     private Inventory playerInventory;
+    private int _observedInventoryCount;
+    
     public Item HealthPotion;
+    public Item ManaPotion;
     public Item Sword;
 
-    public Slider potionSLider;
+    public Transform[] spawnLocations;
+
+
+    private Item[] merchantPool;
+    //private List<Item> merchantPool;
+
+
+    private void ObjectPoolWarmup()
+    {
+        merchantPool = new Item[3];
+        
+        
+        var hpPot = Instantiate(HealthPotion, spawnLocations[0]);
+        var mpPot = Instantiate(ManaPotion,spawnLocations[1]);
+        var sword = Instantiate(Sword,spawnLocations[2]);//Maybe instead of clone, instatiate the prefab to keep it between scenes?
+
+        hpPot.gameObject.SetActive(false);
+        mpPot.gameObject.SetActive(false);
+        sword.gameObject.SetActive(false);
+        
+        merchantPool[0] = hpPot;
+        merchantPool[1] = mpPot;
+        merchantPool[2] = sword;
+    }
+
+    public Item ObjectPoolSpawn(int arrayIndex)
+    {
+        var result = merchantPool[arrayIndex];
+        result.gameObject.SetActive(true);
+        return result;
+    }
+
+    public void ObjectPoolreturn(Item go)
+    {
+        Debug.Log(go);
+        
+        go.gameObject.SetActive(false);
+    }
+
     
-
-
-    public enum PotionType
-    {
-        Health,
-        Mana
-    }
-
-    public class Potion
-    {
-        private PotionType PotionType;
-        private int level;
-
-        public int Level
-        {
-            get => level;
-            set => level = value;
-        }
-
-        public PotionType PotionType1 => PotionType;
-
-        public Potion Clone()
-        {
-            return (Potion) MemberwiseClone();
-        }
-
-    }
-
-    public class StoreManager
-    {
-        private Potion HealthPotionStandard;
-        private Potion ManaPotionStandard;
-
-        public StoreManager()
-        {
-            HealthPotionStandard = new Potion();
-            ManaPotionStandard = new Potion();
-        }
-
-
-        public Potion BuyPotion(PotionType type, int level)
-        {
-            switch (type)
-            {
-                case PotionType.Health:
-                    var potion = HealthPotionStandard.Clone();
-                    potion.Level = level;
-                    return potion;
-                case PotionType.Mana:
-                    potion = HealthPotionStandard.Clone();
-                    potion.Level = level;
-                    return potion;
-                default:
-                    Debug.Log("Something went wrong");
-                    return null;
-            }
-        }
-
-    }
-
-
     private void Start()
     {
+
         playerInventory = FindObjectOfType<Inventory>();
+        playerInventory.OnInventoryChange += (previousValue, newValue) => {
+            Debug.Log($"Inventory size change from {previousValue} to {newValue}");
+            _observedInventoryCount = newValue;
+
+        };
         
-        amountOfHealthPots.text = healthPotions.Count.ToString();
-        amountOfManaPotions.text = manaPotions.Count.ToString();
+        
+        
+        
+        ObjectPoolWarmup();
+
+        for (int i = 0; i < merchantPool.Length; i++)
+        {
+            ObjectPoolSpawn(i);
+        }
+        
+        
         
         swordButton.onClick.AddListener(BuySword);
         healthButton.onClick.AddListener(BuyHealthPotion);
         manaButton.onClick.AddListener(BuyManaPotion);
         
     }
-
-    private void BuyManaPotion()
-    {
-        
-        var manaPot = storeManager.BuyPotion(PotionType.Health, 10);
-        manaPotions.Add(manaPot);
-        amountOfHealthPots.text = healthPotions.Count.ToString();
-        amountOfManaPotions.text = manaPotions.Count.ToString();
-    }
-
+    
     private void BuyHealthPotion()
     {
-        var hpPot = Instantiate(HealthPotion);
-        
-        playerInventory.AddToInventory(hpPot);
-        
-        var helfPotion = storeManager.BuyPotion(PotionType.Health, 10);
-        healthPotions.Add(helfPotion);
-        amountOfHealthPots.text = healthPotions.Count.ToString();
-        amountOfManaPotions.text = manaPotions.Count.ToString();
-    }
 
+        var item = ObjectPoolSpawn(0);
+        
+        
+        playerInventory.AddToInventory(item,1);
+    }
+    private void BuyManaPotion()
+    {
+        playerInventory.AddToInventory(ObjectPoolSpawn(1),1);
+    }
     private void BuySword()
     {
-        playerInventory.AddToInventory(Sword);
+        playerInventory.AddToInventory(ObjectPoolSpawn(2),1);
+        
+        ObjectPoolreturn(ObjectPoolSpawn(2));
+        swordButton.gameObject.SetActive(false);
+        
+        
     }
 }
 

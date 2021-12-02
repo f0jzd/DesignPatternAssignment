@@ -9,8 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public int playerHealth;
     //public float playerHealth;
     //public static Player Instance { get; set; } = new Player();
-    
-    private Inventory _inventory = new Inventory();
+
+    private Inventory _inventory;
     
     public static PlayerMovement Instance
     {

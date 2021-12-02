@@ -12,8 +12,5 @@ public class Item : MonoBehaviour
     public bool stackable;
     public int amount;
     public float value;
-
-
-    //public virtual bool Stackable { get; set; }
-    //public string Amount { get; set; }
+    
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,48 +8,103 @@ using Debug = UnityEngine.Debug;
 public class Inventory : MonoBehaviour
 {
 
-    public int inventorySize;
-    private int inventorySlot = 1;
+    private List<OnInventoryChangeDelegate> _inventorySubscriber = new List<OnInventoryChangeDelegate>();
+    
+    
+    
+    
+    
+    public delegate void OnInventoryChangeDelegate(int previousValue, int newValue);
+    
+    public int maxInventorySize;
 
-    //private List<Item> inventory = new List<Item>();
-    private List<Item> Inventory1 { get; } = new List<Item>();
+    [HideInInspector]public int currentInventorySize;
 
-    public void AddToInventory(Item item)
+    private int inventoryCount;
+    
+    
+    public int money;
+    
+    
+    private bool itemExists = false;
+    
+    private List<Item> Inventory1;
+
+    public Inventory(List<Item> inventory1)
     {
-        
-        if (!Inventory1.Contains(item) && Inventory1.Count<inventorySize)
-        {
-            Debug.Log($"Adding {item} to inventory");
-            Inventory1.Add(item);
-            return;
-        }
-        
-        if (item.stackable)
-        {
-            var amountToAdd = item.amount;
-            
-            var result = Inventory1.Find(item => item);
+        Inventory1 = inventory1;
+    }
 
-            result.amount += amountToAdd;
-            
-            Debug.Log($"Item : {item} , Amount: {result.amount}");
-            
-        }
-        if (Inventory1.Contains(item) && !item.stackable)
+
+    public int CurrentInventorySize
+    {
+        set
         {
-            if (Inventory1.Count < inventorySize)
+            var previousValue = currentInventorySize;
+            currentInventorySize = value;
+            
+            foreach (var subscriber in _inventorySubscriber)
+            {
+                subscriber(previousValue, value);
+            }
+        }
+        get => currentInventorySize;
+    }
+
+
+    public event OnInventoryChangeDelegate OnInventoryChange
+    {
+        add => _inventorySubscriber.Add(value);
+        remove => _inventorySubscriber.Remove(value);
+    }
+
+
+    private void Start()
+    {
+        _inventorySubscriber = new List<OnInventoryChangeDelegate>();
+    }
+
+
+    public void AddToInventory(Item item, int amount)
+    {
+        foreach (var itemInInventory in Inventory1)
+        {
+            if (item.itemName == itemInInventory.itemName)
+            {
+                Debug.Log("found duplicate");
+                itemExists = true;
+                if (item.stackable)
+                {
+                    var founditem = itemInInventory;
+                    founditem.amount += amount;
+                    Debug.Log($"Item : {item} , Amount: {founditem.amount}");
+                }
+                
+            }
+        }
+        
+        if (!itemExists && Inventory1.Count<maxInventorySize)
+        {
+            Inventory1.Add(item);
+            currentInventorySize++;
+            Debug.Log($"Adding {item} to inventory");
+        }
+
+        if (itemExists && !item.stackable)
+        {
+            if (Inventory1.Count < maxInventorySize)
             {
                 Inventory1.Add(item);
-                inventorySlot++;
-                Debug.Log("added item");
+                currentInventorySize++;
             }
 
-            if (Inventory1.Count > inventorySize)
+            if (Inventory1.Count > maxInventorySize)
             {
                 Debug.Log("inventory is full");
             }
         }
+
+        itemExists = false;
         Debug.Log($"Inventory Size: {Inventory1.Count}");
-       
     }
 }

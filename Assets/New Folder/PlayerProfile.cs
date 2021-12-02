@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerProfile : MonoBehaviour
 {
-    private Inventory playerInventory = new Inventory();
+    
 
 
     void Start()
