@@ -1,68 +1,50 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class Inventory : MonoBehaviour
 {
+    
 
-    private List<OnInventoryChangeDelegate> _inventorySubscriber = new List<OnInventoryChangeDelegate>();
-    
-    
-    
-    
-    
-    public delegate void OnInventoryChangeDelegate(int previousValue, int newValue);
-    
     public int maxInventorySize;
 
     [HideInInspector]public int currentInventorySize;
 
     private int inventoryCount;
-    
-    
-    public int money;
-    
-    
-    private bool itemExists = false;
-    
-    private List<Item> Inventory1;
 
-    public Inventory(List<Item> inventory1)
+    public delegate void OnMoneyChangeDelegate(int previousValue, int newValue);
+    
+    public event OnMoneyChangeDelegate onMoneyChange
     {
-        Inventory1 = inventory1;
+        add => _moneySubscribers.Add(value);
+        remove => _moneySubscribers.Remove(value);
     }
 
+    private List<OnMoneyChangeDelegate> _moneySubscribers = new List<OnMoneyChangeDelegate>();
+    public int _playerMoney;
 
-    public int CurrentInventorySize
+    public int PlayerMoney
     {
         set
         {
-            var previousValue = currentInventorySize;
-            currentInventorySize = value;
-            
-            foreach (var subscriber in _inventorySubscriber)
-            {
+            var previousValue = _playerMoney;
+            _playerMoney = value;
+
+            foreach (var subscriber in _moneySubscribers)
                 subscriber(previousValue, value);
-            }
+            
         }
-        get => currentInventorySize;
+        get => _playerMoney;
     }
+    
+    
+    private bool itemExists = false;
+
+    private List<Item> Inventory1 = new List<Item>();
 
 
-    public event OnInventoryChangeDelegate OnInventoryChange
-    {
-        add => _inventorySubscriber.Add(value);
-        remove => _inventorySubscriber.Remove(value);
-    }
-
-
-    private void Start()
-    {
-        _inventorySubscriber = new List<OnInventoryChangeDelegate>();
-    }
+    
 
 
     public void AddToInventory(Item item, int amount)
@@ -71,7 +53,6 @@ public class Inventory : MonoBehaviour
         {
             if (item.itemName == itemInInventory.itemName)
             {
-                Debug.Log("found duplicate");
                 itemExists = true;
                 if (item.stackable)
                 {
@@ -86,6 +67,7 @@ public class Inventory : MonoBehaviour
         if (!itemExists && Inventory1.Count<maxInventorySize)
         {
             Inventory1.Add(item);
+            
             currentInventorySize++;
             Debug.Log($"Adding {item} to inventory");
         }
@@ -95,6 +77,7 @@ public class Inventory : MonoBehaviour
             if (Inventory1.Count < maxInventorySize)
             {
                 Inventory1.Add(item);
+            
                 currentInventorySize++;
             }
 
@@ -107,4 +90,6 @@ public class Inventory : MonoBehaviour
         itemExists = false;
         Debug.Log($"Inventory Size: {Inventory1.Count}");
     }
+
+    
 }

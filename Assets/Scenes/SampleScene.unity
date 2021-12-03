@@ -768,6 +768,9 @@ MonoBehaviour:
   HealthPotion: {fileID: 2620180499521912293, guid: 50d9c803506dc434ab80f9ddeea12083, type: 3}
   ManaPotion: {fileID: 2620180499521912293, guid: 838f3fc01e4c55f4e83b6dde43c5c1e1, type: 3}
   Sword: {fileID: 4674108384474883319, guid: 7374013f3aa58584192d6e9081c50aaa, type: 3}
+  HealthPotionCost: 2
+  ManaPotionCost: 2
+  SwordCost: 10
   spawnLocations:
   - {fileID: 731376542}
   - {fileID: 223205559}
@@ -1035,7 +1038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxInventorySize: 5
   currentInventorySize: 0
-  money: 0
+  _playerMoney: 20
 --- !u!1 &1554040319
 GameObject:
   m_ObjectHideFlags: 0

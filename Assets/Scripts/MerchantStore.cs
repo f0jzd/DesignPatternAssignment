@@ -11,21 +11,29 @@ using Debug = UnityEngine.Debug;
 
 public class MerchantStore : MonoBehaviour
 {
+    [Header("UI Buttons")]
     public Button healthButton;
     public Button manaButton;
     public Button swordButton;
     
-    private Inventory playerInventory;
-    private int _observedInventoryCount;
-    
+    [Header("Item References")]
     public Item HealthPotion;
     public Item ManaPotion;
     public Item Sword;
 
+    [Header("Item Prices")]
+    public int HealthPotionCost;
+    public int ManaPotionCost;
+    public int SwordCost;
+
+    
+    [Header("Display Positions")]
     public Transform[] spawnLocations;
 
 
     private Item[] merchantPool;
+    private Inventory playerInventory;
+    private int _observedPlayerMoney;
     //private List<Item> merchantPool;
 
 
@@ -64,14 +72,12 @@ public class MerchantStore : MonoBehaviour
     
     private void Start()
     {
-
         playerInventory = FindObjectOfType<Inventory>();
-        playerInventory.OnInventoryChange += (previousValue, newValue) => {
-            Debug.Log($"Inventory size change from {previousValue} to {newValue}");
-            _observedInventoryCount = newValue;
-
+        playerInventory.onMoneyChange += (previousValue, newValue) =>
+        {
+            Debug.Log($"Money has changed from {previousValue} to {newValue}");
+            _observedPlayerMoney = newValue;
         };
-        
         
         
         
@@ -92,24 +98,52 @@ public class MerchantStore : MonoBehaviour
     
     private void BuyHealthPotion()
     {
+        
+        if (playerInventory.PlayerMoney-HealthPotionCost < 0)
+        {
+            Debug.Log("Too expensive");
+            return;
+        }
+        
+        playerInventory.AddToInventory(ObjectPoolSpawn(0),1);
+        playerInventory.PlayerMoney -= HealthPotionCost;
 
-        var item = ObjectPoolSpawn(0);
-        
-        
-        playerInventory.AddToInventory(item,1);
+
     }
     private void BuyManaPotion()
     {
+
+        if (playerInventory.PlayerMoney-ManaPotionCost < 0)
+        {
+            Debug.Log("Too expensive");
+            return;
+        }
+        
         playerInventory.AddToInventory(ObjectPoolSpawn(1),1);
+        playerInventory.PlayerMoney -= ManaPotionCost;
+        
+        
+        
+        
     }
     private void BuySword()
     {
-        playerInventory.AddToInventory(ObjectPoolSpawn(2),1);
         
+        if (playerInventory.PlayerMoney-SwordCost < 0)
+        {
+            Debug.Log("Too expensive");
+            return;
+        }
+        
+        playerInventory.AddToInventory(ObjectPoolSpawn(2),1);
         ObjectPoolreturn(ObjectPoolSpawn(2));
         swordButton.gameObject.SetActive(false);
         
+        playerInventory.PlayerMoney -= SwordCost;
+        
         
     }
+
+    
 }
 
