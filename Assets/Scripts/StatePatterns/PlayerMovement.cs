@@ -7,9 +7,7 @@ public class PlayerMovement : MonoBehaviour
     
     [Range(0,100)]
     public int playerHealth;
-    //public float playerHealth;
-    //public static Player Instance { get; set; } = new Player();
-
+    
     private Inventory _inventory;
     
     public static PlayerMovement Instance
@@ -20,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 instance = new GameObject().AddComponent<PlayerMovement>();
             }
-
             return instance;
         }
     }
@@ -38,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         StoppedMoving,
         StartedWalking,
         StartedRunning,
-        StartIdle
+        StartIdle,
     }
     
     private State _pState = State.Idle;
@@ -56,36 +53,34 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetMouseButton(0))
+        {
+            Shooting();
+        }
+
+        //Movement
         if (Input.GetButton("Horizontal"))
         {
             _pEvent = Event.StartedWalking; 
-            OnEvent(_pEvent);
+            MovementEvent(_pEvent);
         }
         if (Input.GetButton("Horizontal") && Input.GetKey(KeyCode.LeftShift))
         {
             _pEvent = Event.StartedRunning; 
-            OnEvent(_pEvent);
+            MovementEvent(_pEvent);
         }
         if (!Input.GetButton("Horizontal"))
         {
             _pEvent = Event.StoppedMoving;
-            OnEvent(_pEvent);
-        }
-        if (_pState == State.Idle)
-        {
-            Debug.Log("Idle");
-        }
-        if (_pState == State.Walking)
-        {
-            Debug.Log("Walking");
-        }
-        if (_pState == State.Running)
-        {
-            Debug.Log("Running");
+            MovementEvent(_pEvent);
         }
     }
+    private void Shooting()
+    {
+        
+    }
 
-    private void OnEvent(Event playerEvent)
+    private void MovementEvent(Event playerEvent)
     {
         switch (playerEvent)
         { 
@@ -124,5 +119,4 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
-    
 }

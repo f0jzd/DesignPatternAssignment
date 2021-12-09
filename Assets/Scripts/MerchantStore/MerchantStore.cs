@@ -73,6 +73,13 @@ public class MerchantStore : MonoBehaviour
     private void Start()
     {
         playerInventory = FindObjectOfType<Inventory>();
+
+
+        playerInventory.addItemToInventory += BuyHealthPotion;
+        playerInventory.addItemToInventory += BuyManaPotion;
+        playerInventory.addItemToInventory += BuySword;
+        
+
         playerInventory.onMoneyChange += (previousValue, newValue) =>
         {
             Debug.Log($"Money has changed from {previousValue} to {newValue}");
@@ -106,6 +113,9 @@ public class MerchantStore : MonoBehaviour
         }
         
         playerInventory.AddToInventory(ObjectPoolSpawn(0),1);
+        
+        //methodName?.invoke, invoke the event, only invokes in something is listening to it.
+        
         playerInventory.PlayerMoney -= HealthPotionCost;
 
 
@@ -144,6 +154,6 @@ public class MerchantStore : MonoBehaviour
         
     }
 
-    
+   
 }
 

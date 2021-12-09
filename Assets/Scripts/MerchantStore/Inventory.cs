@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -14,6 +15,15 @@ public class Inventory : MonoBehaviour
     private int inventoryCount;
 
     public delegate void OnMoneyChangeDelegate(int previousValue, int newValue);
+
+    
+    
+    public delegate void inventoryChange();
+
+    public event inventoryChange addItemToInventory;
+
+    
+    
     
     public event OnMoneyChangeDelegate onMoneyChange
     {
@@ -44,7 +54,10 @@ public class Inventory : MonoBehaviour
     private List<Item> Inventory1 = new List<Item>();
 
 
-    
+    private void Start()
+    {
+        //
+    }
 
 
     public void AddToInventory(Item item, int amount)
@@ -91,5 +104,11 @@ public class Inventory : MonoBehaviour
         Debug.Log($"Inventory Size: {Inventory1.Count}");
     }
 
-    
+
+    protected virtual void OnAddItemToInventory()
+    {
+        addItemToInventory?.Invoke();
+        Debug.Log("Added an item");
+        
+    }
 }
