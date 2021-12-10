@@ -1,4 +1,7 @@
-# Design Patterns Assignment
+# Design Patterns Assignment Tomas Savela
+
+This is only a collection of different systems where I attempted to use some pattern to the best of my knowledge.
+
 
 ## MerchantStore
 
