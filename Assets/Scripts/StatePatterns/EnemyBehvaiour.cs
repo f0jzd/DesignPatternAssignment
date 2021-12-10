@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class EnemyBehvaiour : MonoBehaviour
@@ -46,7 +43,7 @@ public class EnemyBehvaiour : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        var position = transform.position;//Rider keeps telling me to do this, but how bad is it to only use it once.
+        var position = transform.position;//Rider keeps telling me to do this, but how bad is it to only use it once?
         var targetVector = _playerPosition.position - position;
         RaycastHit2D hit = Physics2D.Raycast(position, targetVector, rayDistance,LayerMask);
         Debug.DrawLine(position, (targetVector.normalized * rayDistance) + position);

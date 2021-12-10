@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -10,21 +8,9 @@ public class Inventory : MonoBehaviour
 
     public int maxInventorySize;
 
-    [HideInInspector]public int currentInventorySize;
-
     private int inventoryCount;
 
     public delegate void OnMoneyChangeDelegate(int previousValue, int newValue);
-
-    
-    
-    public delegate void inventoryChange();
-
-    public event inventoryChange addItemToInventory;
-
-    
-    
-    
     public event OnMoneyChangeDelegate onMoneyChange
     {
         add => _moneySubscribers.Add(value);
@@ -53,13 +39,6 @@ public class Inventory : MonoBehaviour
 
     private List<Item> Inventory1 = new List<Item>();
 
-
-    private void Start()
-    {
-        //
-    }
-
-
     public void AddToInventory(Item item, int amount)
     {
         foreach (var itemInInventory in Inventory1)
@@ -81,7 +60,6 @@ public class Inventory : MonoBehaviour
         {
             Inventory1.Add(item);
             
-            currentInventorySize++;
             Debug.Log($"Adding {item} to inventory");
         }
 
@@ -90,8 +68,7 @@ public class Inventory : MonoBehaviour
             if (Inventory1.Count < maxInventorySize)
             {
                 Inventory1.Add(item);
-            
-                currentInventorySize++;
+                
             }
 
             if (Inventory1.Count > maxInventorySize)
@@ -102,13 +79,5 @@ public class Inventory : MonoBehaviour
 
         itemExists = false;
         Debug.Log($"Inventory Size: {Inventory1.Count}");
-    }
-
-
-    protected virtual void OnAddItemToInventory()
-    {
-        addItemToInventory?.Invoke();
-        Debug.Log("Added an item");
-        
     }
 }

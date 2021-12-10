@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 using Debug = UnityEngine.Debug;
 
@@ -22,10 +17,12 @@ public class PlayerFactory : MonoBehaviour
 
     public Player CreatePlayer(string playerName,string playerRace,string playerClass)
     {
+        Debug.Log($"Your name is {playerName}, your race is {playerRace}, and your class is {playerClass} ");
+        
         return new PlayerBuilder()
-            .PlayerName("Pee")
-            .PlayerRace("Poo")
-            .PlayerClass("Eee")
+            .PlayerName(playerName)
+            .PlayerRace(playerRace)
+            .PlayerClass(playerClass)
             .PlayerBuild();
     }
 
@@ -175,10 +172,9 @@ public class PlayerFactory : MonoBehaviour
             choices[1].GetComponentInChildren<Text>().text = "Mage";
             choices[2].GetComponentInChildren<Text>().text = "Ranger";
         }
-
         if (currentEvent == Event.ClassChosen)
         {
-            Debug.Log($"Your name is {tempName}, your race is {tempRace}, and your class is {tempClass} ");
+            CreatePlayer(tempName, tempRace, tempClass);
         }
     }
 }
@@ -207,8 +203,6 @@ public class PlayerBuilder
     public string _race;
     public string _playerClass;
     
-    //private int _healthRestored; 
-    //private int _manaRestored; 
     public PlayerBuilder PlayerName(string playerName)
     {
         _playerName = playerName;
@@ -231,31 +225,4 @@ public class PlayerBuilder
     }
     
 }
-interface IPlayer
-{
-    
-    public string PlayerName { get; set; }
-    public string Race { get; set; }
-    public string PlayerClass { get; set; }
-    
-    
-    /*string PotionType();
-    string HealthRestored { get; set; }
-    int ManaRestored{ get; set; }*/
-}
-class CreatedPlayerClass : IPlayer
-{
-    public string PotionType()
-    {
-        return "This is your Class";
-    }
-    
-    public string PlayerName { get; set; }
-    public string Race { get; set; }
-    public string PlayerClass { get; set; }
-}
 
-class PlayerCreatorSystem
-{
-    
-}
