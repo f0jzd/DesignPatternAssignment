@@ -1,4 +1,4 @@
-# DesignPatternAssignment
+# Design Patterns Assignment
 
 ## MerchantStore
 
