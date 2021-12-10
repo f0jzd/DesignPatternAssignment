@@ -8,4 +8,6 @@ MerchantStore is using an object pool to create the inventory of the shop. I use
 
 ## Inventory
 
+Observer
+
 Inventory is using the rest of the observer to keep a view of the money being spent in the players inventory. Here I wanted to implement an observerpattern to view changes done to the inventory, but then I had to change the list to an observable list from what I found online and since that could bring a lot of problems which I do not know how to solve I chose to do something else, and therefore used an observerpattern on the players money instead. This does not need to be an a list of subscriber but it also depends on the usage of it, what exactly is checking who the money value.
