@@ -1,3 +1,11 @@
+# RESUMBIT CHANGES
+
+## SpellSpawner and SpellTest
+
+This is a new attempt at making an object pool, for now it just spawns items from the pool in a fixed position, and then live for a fixed time, and then return. It has a limit of stored objects and if you are trying to spawn more than stored, it instatiates, but these are then destroyed rather than returned to keep the pool its original size.
+
+
+
 # Design Patterns Assignment, Tomas Savela
 
 This is only a collection of different systems where I attempted to use some pattern to the best of my knowledge.
