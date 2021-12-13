@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -44,7 +37,8 @@ public class MerchantStore : MonoBehaviour
         
         var hpPot = Instantiate(HealthPotion, spawnLocations[0]);
         var mpPot = Instantiate(ManaPotion,spawnLocations[1]);
-        var sword = Instantiate(Sword,spawnLocations[2]);//Maybe instead of clone, instatiate the prefab to keep it between scenes?
+        var sword = Instantiate(Sword,spawnLocations[2]);
+        //Maybe instead of clone, instatiate the prefab to keep it between scenes?
 
         hpPot.gameObject.SetActive(false);
         mpPot.gameObject.SetActive(false);
@@ -70,13 +64,7 @@ public class MerchantStore : MonoBehaviour
     private void Start()
     {
         playerInventory = FindObjectOfType<Inventory>();
-
-
-        playerInventory.addItemToInventory += BuyHealthPotion;
-        playerInventory.addItemToInventory += BuyManaPotion;
-        playerInventory.addItemToInventory += BuySword;
         
-
         playerInventory.onMoneyChange += (previousValue, newValue) =>
         {
             Debug.Log($"Money has changed from {previousValue} to {newValue}");
@@ -110,9 +98,6 @@ public class MerchantStore : MonoBehaviour
         }
         
         playerInventory.AddToInventory(ObjectPoolSpawn(0),1);
-        
-        //methodName?.invoke, invoke the event, only invokes in something is listening to it.
-        
         playerInventory.PlayerMoney -= HealthPotionCost;
 
 
@@ -145,7 +130,6 @@ public class MerchantStore : MonoBehaviour
         playerInventory.AddToInventory(ObjectPoolSpawn(2),1);
         ObjectPoolreturn(ObjectPoolSpawn(2));
         swordButton.gameObject.SetActive(false);
-        
         playerInventory.PlayerMoney -= SwordCost;
         
         
