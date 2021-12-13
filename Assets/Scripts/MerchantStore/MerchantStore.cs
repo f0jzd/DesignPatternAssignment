@@ -64,11 +64,8 @@ public class MerchantStore : MonoBehaviour
 
     public void ObjectPoolreturn(Item go)
     {
-        Debug.Log(go);
-        
         go.gameObject.SetActive(false);
     }
-
     
     private void Start()
     {
@@ -154,6 +151,6 @@ public class MerchantStore : MonoBehaviour
         
     }
 
-   
+    
 }
 
