@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public class SpellSpawner : MonoBehaviour
 {
@@ -41,8 +36,6 @@ public class SpellSpawner : MonoBehaviour
             
             return result;
         }
-
-        //return null;
         return Instantiate(spell);
     }
 
@@ -71,8 +64,6 @@ public class SpellSpawner : MonoBehaviour
         {
             var go = ObjectPoolSpawn();
             go.GetComponent<SpellTest>().spawnBullet(this);
-            
-            //go.transform.position = new Vector3(0, 0, 0);
         }
     }
 }

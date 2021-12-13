@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class SpellTest : MonoBehaviour
@@ -12,10 +8,9 @@ public class SpellTest : MonoBehaviour
 
     public void spawnBullet(SpellSpawner spellSpawner)
     {
-        
         currentPool = spellSpawner;
     }
-
+    
     private void Update()
     {
         lifeTime -= Time.deltaTime;
